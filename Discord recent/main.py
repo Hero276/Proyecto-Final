@@ -1,6 +1,7 @@
 import requests
 import discord
-from model import get_class
+import os
+import random
 import numpy as np
 from discord.ext import commands
 import webserver
@@ -19,10 +20,6 @@ async def on_ready():
 @bot.command()
 async def hello(ctx):
     await ctx.send(f'Hi! I am a bot {bot.user}!')
-
-@bot.command()
-async def heh(ctx, count_heh = 5):
-    await ctx.send("he" * count_heh)
 
 @bot.command()
 async def poke(ctx,arg):
@@ -57,7 +54,7 @@ async def divide(ctx, left: int, right: int):
 
 @bot.command()
 async def raiz(ctx,n1:int):
-    """Esta función suma dos números enteros y devuelve el resultado."""
+    """Esta función saca la raíz cuadrada de los números."""
     resultado2 = np.sqrt(n1)
     await ctx.send(f"La raiz cuadrada de {n1} {resultado2}")
 
@@ -67,15 +64,19 @@ async def exp(ctx,n1:int, n2: int):
     await ctx.send(f"el numero {n1} elevado a la {n2} es {resultado_exp}")
 
 @bot.command()
-async def check(ctx):
-    if ctx.message.attachments:
-        for attachment in ctx.message.attachments:
-            file_name = attachment.filename
-            file_url = attachment.url
-            await attachment.save(f"./{attachment.filename}")
-            await ctx.send(get_class(model_path="./keras_model.h5", labels_path="labels.txt", image_path=f"./{attachment.filename}"))
-    else:
-        await ctx.send("You forgot to upload the image :(")
-        
+async def guide(ctx):
+    await ctx.send(f"""Hola soy el bot de este servidor y mi nombre es Hero276 Bot y estas son mis funciones:
+                    1. Saludo a un nuevo integrante del servidor
+                    2. Puedo aparecer imágenes de Pokemones
+                    3. Puedo limpiar y borrar los mensajes del servidor
+                    4. Puedo dividir numeros (menos el 0)
+                    5. Puedo sacar la raiz cuadrada de los números
+                    6. Puedo elevar al cuadrado los números""")           
+
+@bot.command()
+async def gif(ctx):
+    gif = random.choice(os.listdir("gifs de Discord"))
+    await ctx.send(file=discord.File(f'gifs de Discord/{gif}'))
+
 webserver.keep_alive()
-bot.run(DISCORD_TOKEN)
+bot.run("DISCORD_TOKEN")
